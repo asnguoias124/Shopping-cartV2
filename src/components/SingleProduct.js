@@ -2,10 +2,15 @@ import React from 'react'
 import {Card, Button} from 'react-bootstrap';
 import Rating from './Rating';
 import { cartState } from '../context/Context';
+import { useSelector } from 'react-redux';
+import { faker } from '@faker-js/faker';
+import { addToCart } from '../action/action';
+import { connect } from 'react-redux';
+import {Link} from 'react-router-dom';
 
-const SingleProduct = ({ prod}) => {
+const SingleProduct = ({ prod, addToCart}) => {
 
-    const {state: {cart}, dispatch} =  cartState();
+    
   return (
     <div className='products'>
         <Card>
@@ -13,36 +18,27 @@ const SingleProduct = ({ prod}) => {
             <Card.Body>
                 <Card.Title>{prod.name}</Card.Title>
                 <Card.Subtitle style={{paddingBottom: 10}}>
-                    <span>$ {prod.price.split(".")[0]} </span>
-                        {prod.fastDelivery ? (
-                            <div>Fast Delivery</div>
-                        ) : (
-                            <div>4 days Delivery</div>
-                        )}
+                    <span>$ {prod.price.split(".")[0]}</span>
+                       
+                    <div>Fast Delivery</div>
+                       
+                            
                     <Rating rating={prod.ratings}/>
+                    {
+                    
+                          
+                            <Button onClick = {() => addToCart(prod.id)}>
+                            Add to Cart  
+                            </Button>
+                        
+                    }    
+                   <Link to="/Detail" className='Detail'>
+                        
+                        <Button variant="outline-secondary" className='Detail'>View Detail</Button>{' '}
+                    </Link>
                     
                 </Card.Subtitle>
-                {
-                    cart.some(p=>p.id === prod.id) ?(
-                        <Button onClick={()=>{
-                            dispatch({
-                                type: 'REMOVE_FROM_CART',
-                                payload: prod,
-                            });
-                        }}   variant="danger">
-                        Remove from Cart
-                        </Button>
-                    ):(
-                        <Button onClick={()=>{
-                            dispatch({
-                                type: 'ADD_TO_CART',
-                                payload: prod,
-                            });
-                        }} disabled={!prod.inStock}>
-                        {!prod.inStock ? "Out of stock" : "Add to Cart"}
-                        </Button>
-                    )
-                }
+                
                 
                 
             </Card.Body>
@@ -51,4 +47,10 @@ const SingleProduct = ({ prod}) => {
   )
 }
 
-export default SingleProduct
+const mapDispatchToProp = dispatch =>{
+    return{
+      addToCart: (id) => dispatch(addToCart(id)),
+    }
+  }
+
+export default connect (null,mapDispatchToProp)(SingleProduct);

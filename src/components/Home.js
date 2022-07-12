@@ -2,56 +2,38 @@ import React from 'react';
 import { cartState } from '../context/Context';
 import Filter from './Filter';
 import SingleProduct from './SingleProduct';
+import { useSelector, useDispatch } from 'react-redux';
+import { faker } from '@faker-js/faker';
+import { connect } from 'react-redux';
+import { addToCart } from '../action/action';
 
-const Home = () => {
-
-  const { 
-    state: {products},
-    productState:{byStock, byFastDelivery,sort,byRating,searchQuery},
-  } = cartState();
-
-  const transformProducts = () =>{
-    let sortedProducts = products;
-
-    if (sort) {
-      sortedProducts = sortedProducts.sort((a, b) =>
-        sort === "lowToHigh" ? a.price - b.price : b.price - a.price
-      );
-    }
-
-    if(!byStock){
-      sortedProducts = sortedProducts.filter((prod)=> prod.inStock);
-    }
-
-    if(byFastDelivery){
-      sortedProducts = sortedProducts.filter((prod)=> prod.FastDelivery);
-    }
-    
-    if(byRating){
-      sortedProducts = sortedProducts.filter((prod)=> prod.ratings >= byRating);
-
-    }
-
-    if(searchQuery){
-      sortedProducts = sortedProducts.filter((prod)=> prod.name.toLowerCase().includes(searchQuery));
-
-    }
-
-    return sortedProducts;
-  };
+const Home = ({ products }) => {
 
   return (
+    
     <div className='home'>
       <Filter />
       <div className='productContainer'>
-          {
-            transformProducts().map((prod)=>{
-              return <SingleProduct prod={prod} key={prod.id} />
-            })
-          }
+
+              {
+                products && products.map(product => (
+                  <SingleProduct prod ={product} key = {product.id}/>
+                )
+                
+              )}
+
       </div>
     </div>
   )
 }
 
-export default Home
+const mapStatetoProps = (state) =>{
+  return {
+    products: state.shop.product
+
+  }
+}
+
+
+
+export default connect(mapStatetoProps)(Home)

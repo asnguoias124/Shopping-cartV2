@@ -1,18 +1,25 @@
-import React from 'react'
+import React,{useState, useEffect} from 'react'
 import { Badge, Button, Container,Dropdown,FormControl,Nav,Navbar } from 'react-bootstrap'
 import DropdownToggle from 'react-bootstrap/esm/DropdownToggle'
 import { AiFillDelete } from 'react-icons/ai'
 import {BsCartFill} from 'react-icons/bs'
 import { Link } from 'react-router-dom'
-import { cartState } from '../context/Context'
 import './Style.css';
+import { connect } from 'react-redux';
+import { removeFromCart } from '../action/action'
 
-const Header = () => {
+const Header = ({cart,removeFromCart}) => {
 
-    const {state:{cart},
-    dispatch,
-    productDispatch,
-  } = cartState();
+  const [cartCount,setCartCount] = useState(0)
+
+  useEffect(() =>{
+    let count =0 ;
+    cart.forEach(item =>{
+      count += item.qty
+    })
+
+    setCartCount(count);
+  },[cart, cartCount])
   return (
     <Navbar bg="dark" variant="dark" style= {{height:80}}>
         <Container className='container'>
@@ -24,12 +31,7 @@ const Header = () => {
               style ={{width: 500}}
               placeholder='Search the products'
               className='m-auto'
-              onChange={(e) =>{
-                productDispatch({
-                  type: "FILTER_BY_SEARCH",
-                  payload: e.target.value,
-                })
-              }}
+              
             ></FormControl>
           </Navbar.Text>
           <Nav>
@@ -38,13 +40,14 @@ const Header = () => {
 
                   <BsCartFill className='cartItemBox' color="white" fontSize="25px"/>   
                   
-                  <Badge bg>{cart.length}</Badge>
+                  <Badge bg>{cartCount}</Badge>
                     
               </DropdownToggle>
               
               <Dropdown.Menu style={{minWidth: 350}}>
 
-                {cart.length > 0 ? (
+                
+              {cart.length > 0 ? (
                   <>
                     {
                       cart.map(prod =>(
@@ -61,11 +64,8 @@ const Header = () => {
                         <AiFillDelete 
                           fontSize="20"
                           style={{cursor:"pointer"}}
-                          onClick={() => 
-                          dispatch({
-                            type: "REMOVE_FROM_CART",
-                            payload: prod,
-                          })}
+                          onClick={() => removeFromCart(prod.id)}  
+                         
                         />
                         </span>
                       ))}
@@ -78,7 +78,6 @@ const Header = () => {
                 ): (
                   <span style={{padding:10}}>Cart is empty</span>
                 )}
-
                 
               </Dropdown.Menu>
             </Dropdown>
@@ -91,4 +90,16 @@ const Header = () => {
   )
 }
 
-export default Header
+const mapStateToProps  =  state => {
+  return{
+    cart: state.shop.cart    
+  }
+}
+
+const mapDispatchToProps  = dispatch =>{
+  return{
+    removeFromCart: (id) => dispatch(removeFromCart(id))
+  }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(Header)
