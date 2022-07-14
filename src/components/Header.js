@@ -15,8 +15,10 @@ const Header = ({cart,removeFromCart}) => {
   useEffect(() =>{
     let count =0 ;
     cart.forEach(item =>{
-      count += item.qty
+      count += Number(item.qty)
     })
+
+  
 
     setCartCount(count);
   },[cart, cartCount])
@@ -31,7 +33,7 @@ const Header = ({cart,removeFromCart}) => {
               style ={{width: 500}}
               placeholder='Search the products'
               className='m-auto'
-              
+              // onChange={(e) => setSearchValue(e.target.value)}
             ></FormControl>
           </Navbar.Text>
           <Nav>

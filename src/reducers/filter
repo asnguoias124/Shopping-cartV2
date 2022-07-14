@@ -1,0 +1,33 @@
+import * as actionTypes from '../action/types';
+import shopReducer from "./shop";
+
+
+const productInitialState = {
+
+        byStock: false,
+        byFastDelivery: false, 
+        byRating: 0, 
+        searchQuery:"",
+
+        filteredItems: [1,2,3],
+}
+
+
+const productReducer = (state = productInitialState, action) =>{
+        
+    switch (action.type) {
+        case actionTypes.FILTER_BY_PRICE:
+            return{
+                    ...state, 
+                    filteredItems: action.payload.items,
+                    sort: action.payload.sort,
+            }
+            
+            
+            
+            default:
+                return state;
+    }
+}
+
+export default productReducer;

@@ -1,13 +1,17 @@
 import React from 'react';
-import { cartState } from '../context/Context';
 import Filter from './Filter';
 import SingleProduct from './SingleProduct';
-import { useSelector, useDispatch } from 'react-redux';
-import { faker } from '@faker-js/faker';
+
 import { connect } from 'react-redux';
-import { addToCart } from '../action/action';
+
 
 const Home = ({ products }) => {
+
+  const transformProducts = () =>{
+    let sortedProducts = products;
+
+    return sortedProducts;
+  }
 
   return (
     
@@ -16,7 +20,7 @@ const Home = ({ products }) => {
       <div className='productContainer'>
 
               {
-                products && products.map(product => (
+                products.map(product => (
                   <SingleProduct prod ={product} key = {product.id}/>
                 )
                 
@@ -29,8 +33,8 @@ const Home = ({ products }) => {
 
 const mapStatetoProps = (state) =>{
   return {
-    products: state.shop.product
-
+    products: state.shop.product,
+   
   }
 }
 
