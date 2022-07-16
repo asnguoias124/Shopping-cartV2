@@ -1,32 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React, { useMemo } from 'react';
 import { Button, Col, Form, Image, ListGroup, Row } from 'react-bootstrap';
 import { AiFillDelete } from 'react-icons/ai';
-import Rating from './Rating';
 import { connect } from 'react-redux';
-import { removeFromCart, adjustQty } from '../action/action';
+import { adjustQty, removeFromCart } from '../action/action';
+import Rating from './Rating';
 
 
 const Cart = ({ cart, removeFromCart, adjustQty }) => {
 
-  const [totalItem, setTotalItem] = useState(0)
-  const [totalPrice, setTotalPrice] = useState(0)
+  const totalItem1 = useMemo(() => {
+    return cart.reduce((state, payload, index) => {
+      state.amount += 1;
+      state.price += payload.price * payload.qty;
 
-
-  useEffect(() => {
-    let count = 0;
-    let price = 0;
-    cart.forEach(item => {
-      count += Number(item.qty)
-      price += item.price * item.qty
+      return state;
+    }, {
+      amount: 0,
+      price: 0
     })
 
-    setTotalItem(count);
-    setTotalPrice(price);
-  }, [cart, totalItem, totalPrice, setTotalItem, setTotalPrice])
-
-  const onChangeHandler = (id, value) => { 
-    adjustQty(id, value)
-  }
+  }, [cart])
 
   return (
     <div className='home'>
@@ -46,7 +39,7 @@ const Cart = ({ cart, removeFromCart, adjustQty }) => {
                     <Form.Control
                       as="select"
                       value={prod.qty || 1}
-                      onChange={(e) => onChangeHandler(prod.id, e.target.value)}
+                      onChange={(e) => adjustQty(prod.id, e.target.value)}
                     >
                       {[...Array(prod.inStock).keys()].map((x) => (
                         <option key={x + 1}>{x + 1}</option>
@@ -74,8 +67,8 @@ const Cart = ({ cart, removeFromCart, adjustQty }) => {
 
       </div>
       <div className='filters'>
-        <span className="title">Subtotal ({totalItem}) items</span>
-        <span style={{ fontWeight: 700, fontSize: 20 }}>Total: $ {totalPrice}</span>
+        <span className="title">Subtotal ({totalItem1.amount}) items</span>
+        <span style={{ fontWeight: 700, fontSize: 20 }}>Total: $ {totalItem1.price}</span>
         <Button type="button" disabled={cart.length === 0}>
           Proceed to Checkout
         </Button>

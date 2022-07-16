@@ -1,126 +1,115 @@
-import React,{useState, useEffect} from 'react'
-import { Badge, Button, Container,Dropdown,FormControl,Nav,Navbar } from 'react-bootstrap'
+import React, { useState, useMemo } from 'react'
+import { Badge, Button, Container, Dropdown, FormControl, Nav, Navbar } from 'react-bootstrap'
 import DropdownToggle from 'react-bootstrap/esm/DropdownToggle'
 import { AiFillDelete } from 'react-icons/ai'
-import {BsCartFill} from 'react-icons/bs'
+import { BsCartFill } from 'react-icons/bs'
 import { Link } from 'react-router-dom'
 import './Style.css';
 import { connect } from 'react-redux';
 import { removeFromCart } from '../action/action'
 import Home from './Home'
 
-const Header = ({cart,removeFromCart, products, setData, data}) => {
+const Header = ({ cart, removeFromCart, products, setSearch }) => {
 
-  const [cartCount,setCartCount] = useState(0)
-  const [searchTerm,setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
 
-  useEffect(() =>{
-    let count =0 ;
-    cart.forEach(item =>{
+  const cartCount = useMemo(() => {
+    let count = 0;
+    cart.forEach(item => {
       count += Number(item.qty)
     })
 
-    setCartCount(count);
-  },[cart, cartCount])
+    return count;
+  }, [cart])
 
-  const  handleSearchTermChange = (e) => {
+  const handleSearchTermChange = (e) => {
+    setSearch(e.target.value)
     setSearchTerm(e.target.value)
-
-    
   }
 
-  let dataSearch = products.filter(item => {
-    return Object.keys(item).some(key => 
-        item[key].toString().toLowerCase().includes(searchTerm.toString().toLowerCase())
-      )
-  })
-  
-  data = dataSearch
-  console.log([data]);
-  
   return (
-    <Navbar bg="dark" variant="dark" style= {{height:80}}>
-        <Container className='container'>
-          <Navbar.Brand>
-            <Link to="/" className='headerName'>Clothing-store</Link>
-          </Navbar.Brand>
-          <Navbar.Text className='search'>
-            <FormControl
-              style ={{width: 500}}
-              placeholder='Search the products'
-              className='m-auto'
-              value= {searchTerm}
-              onChange={handleSearchTermChange.bind(this)}
-            ></FormControl>
-          </Navbar.Text>
-          <Nav>
-            <Dropdown className='custom_nav_link'>
-              <DropdownToggle variant='success'>
+    <Navbar bg="dark" variant="dark" style={{ height: 80 }}>
+      <Container className='container'>
+        <Navbar.Brand>
+          <Link to="/" className='headerName'>Clothing-store</Link>
+        </Navbar.Brand>
+        <Navbar.Text className='search'>
+          <FormControl
+            style={{ width: 500 }}
+            placeholder='Search the products'
+            className='m-auto'
+            value={searchTerm}
+            onChange={handleSearchTermChange}
+          ></FormControl>
+        </Navbar.Text>
+        <Nav>
+          <Dropdown className='custom_nav_link'>
+            <DropdownToggle variant='success'>
 
-                  <BsCartFill className='cartItemBox' color="white" fontSize="25px"/>   
-                  
-                  <Badge bg>{cartCount}</Badge>
-                    
-              </DropdownToggle>
-              
-              <Dropdown.Menu style={{minWidth: 350}}>
+              <BsCartFill className='cartItemBox' color="white" fontSize="25px" />
 
-                
+              <Badge bg>{cartCount}</Badge>
+
+            </DropdownToggle>
+
+            <Dropdown.Menu style={{ minWidth: 350 }}>
+
+
               {cart.length > 0 ? (
-                  <>
-                    {
-                      cart.map(prod =>(
-                        <span className='cartitem' key={prod.id}>
-                          <img
-                            src={prod.image}
-                            className="cartItemImg"
-                            alt={prod.name}
-                          />
-                          <div className='cartItemDetail'>
-                            <span>{prod.name}</span>
-                            <span> ${prod.price.split(".")[0]}</span>
-                          </div>
-                        <AiFillDelete 
-                          fontSize="20"
-                          style={{cursor:"pointer"}}
-                          onClick={() => removeFromCart(prod.id)}  
-                         
+                <>
+                  {
+                    cart.map(prod => (
+                      <span className='cartitem' key={prod.id}>
+                        <img
+                          src={prod.image}
+                          className="cartItemImg"
+                          alt={prod.name}
                         />
-                        </span>
-                      ))}
-                      <Link to="/cart">
-                          <Button style={{ width: "95%", margin: "0 10px" }}>
-                            Go To Cart
-                          </Button>
-                      </Link>
-                  </>
-                ): (
-                  <span style={{padding:10}}>Cart is empty</span>
-                )}
-                
-              </Dropdown.Menu>
-            </Dropdown>
+                        <div className='cartItemDetail'>
+                          <span>{prod.name}</span>
+                          <span> ${prod.price.split(".")[0]}</span>
+                        </div>
+                        <AiFillDelete
+                          fontSize="20"
+                          style={{ cursor: "pointer" }}
+                          onClick={() => removeFromCart(prod.id)}
+
+                        />
+                      </span>
+                    ))}
+                  <Link to="/cart">
+                    <Button style={{ width: "95%", margin: "0 10px" }}>
+                      Go To Cart
+                    </Button>
+                  </Link>
+                </>
+              ) : (
+                <span style={{ padding: 10 }}>Cart is empty</span>
+              )}
+
+            </Dropdown.Menu>
+          </Dropdown>
         </Nav>
-        </Container>
-        
-    
+      </Container>
+
+
     </Navbar>
-    
-     
+
+
   )
 }
 
-const mapStateToProps  =  state => {
-  return{
-    cart: state.shop.cart,    
+const mapStateToProps = state => {
+  return {
+    cart: state.shop.cart,
     products: state.shop.product,
   }
 }
 
-const mapDispatchToProps  = dispatch =>{
-  return{
+const mapDispatchToProps = dispatch => {
+  return {
     removeFromCart: (id) => dispatch(removeFromCart(id))
   }
 }
 
-export default connect(mapStateToProps,mapDispatchToProps)(Header)
+export default connect(mapStateToProps, mapDispatchToProps)(Header)
