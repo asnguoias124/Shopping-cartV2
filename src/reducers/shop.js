@@ -1,17 +1,6 @@
-import { faker } from '@faker-js/faker';
 import * as actionTypes from '../action/types';
+import products from './data';
 
-const products = [...Array(5)].map(() => ({
-    id: faker.datatype.uuid(),
-    name: faker.commerce.productName(),
-    desc: faker.lorem.paragraphs(1),
-    price: faker.commerce.price(),
-    image: faker.image.fashion(450, 300, true),
-    inStock: faker.helpers.arrayElement([0, 2, 3, 4, 5, 9]),
-    fastDelivery: faker.datatype.boolean(),
-    ratings: Math.floor(Math.random() * 6)
-
-}));
 
 const initialState = {
     product: products,// {id,name,price,image,inStock,fastDelivery,rating}

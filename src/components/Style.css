@@ -30,6 +30,7 @@
   background: rgba(51, 170, 51, .1)
 }
 
+
 .cartitem {
   display: flex;
   justify-content: space-between;
@@ -193,19 +194,41 @@
   padding: 10px 16px;
   background: #61c7f0;
   color: #ffffff;
-  border: 1px solid #171717;
+  border: 1px solid #e4d8d8;
   cursor: pointer;
   border-radius: 5px;
 }
 
 
-.right__info p > button:active {
+.right__info p > button:hover {
   background-color: #457ee9;
 
 }
 
 .right__info select {
   padding: 10px 16px;
+}
+
+.category-item{
+  padding: 30px 150px;
+  overflow: hidden; /* for clearfix */
+}
+
+.cartitem{
+  text-align: center;
+}
+
+.catitem-1{
+  margin-right: 20px;
+}
+.catitem-2{
+  margin-right: 20px;
+}
+.catitem-3{
+  margin-right: 20px;
+}
+.clearFilter{
+  margin-top: 20px;
 }
 
 /* padding: 15px 25px;

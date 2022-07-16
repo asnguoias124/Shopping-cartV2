@@ -3,7 +3,8 @@ import { Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { addToCart } from '../action/action';
 import Rating from './Rating';
-
+import { Link
+ } from 'react-router-dom';
 const Detail = ({ curent, addToCart }) => {
   const {
     image = '',
@@ -12,6 +13,7 @@ const Detail = ({ curent, addToCart }) => {
     ratings = 1,
     desc = '',
     fastDelivery = '',
+    category = '',
     inStock = 0,
     id = '',
   } = curent || {};
@@ -35,6 +37,11 @@ const Detail = ({ curent, addToCart }) => {
           <p>
                 <span>Price:$ {price}</span>
           </p>
+          
+          <p>
+                <span>Category: {category}</span>
+          </p>
+
           <p>
                 Status: 
                 <span>
@@ -46,13 +53,13 @@ const Detail = ({ curent, addToCart }) => {
           
 
 
-
+          <Link to="/cart">
         <p>
           <button type="button" onClick={() => addToCart(id)}>
             Add To Cart
           </button>
-
           </p>
+          </Link>
         </div>
       </div>
     </div>

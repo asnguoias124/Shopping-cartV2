@@ -14,11 +14,7 @@ const SingleProduct = ({ cart, prod, addToCart, removeFromCart, loadCurrentItem 
           <Card.Title>{prod.name}</Card.Title>
           <Card.Subtitle style={{ paddingBottom: 10, display: 'flex', flexDirection: 'column' }}>
             <span className='product-price'>$ {prod.price.split(".")[0]} </span>
-            {prod.fastDelivery ? (
-              <div>Fast Delivery</div>
-            ) : (
-              <div>4 days Delivery</div>
-            )}
+            {prod.fastDelivery}
             <span>
               <Rating rating={prod.ratings} />
             </span>

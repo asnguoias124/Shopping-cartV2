@@ -7,10 +7,12 @@ import { Link } from 'react-router-dom'
 import './Style.css';
 import { connect } from 'react-redux';
 import { removeFromCart } from '../action/action'
+import Home from './Home'
 
-const Header = ({cart,removeFromCart}) => {
+const Header = ({cart,removeFromCart, products, setData, data}) => {
 
   const [cartCount,setCartCount] = useState(0)
+  const [searchTerm,setSearchTerm] = useState("");
 
   useEffect(() =>{
     let count =0 ;
@@ -18,10 +20,24 @@ const Header = ({cart,removeFromCart}) => {
       count += Number(item.qty)
     })
 
-  
-
     setCartCount(count);
   },[cart, cartCount])
+
+  const  handleSearchTermChange = (e) => {
+    setSearchTerm(e.target.value)
+
+    
+  }
+
+  let dataSearch = products.filter(item => {
+    return Object.keys(item).some(key => 
+        item[key].toString().toLowerCase().includes(searchTerm.toString().toLowerCase())
+      )
+  })
+  
+  data = dataSearch
+  console.log([data]);
+  
   return (
     <Navbar bg="dark" variant="dark" style= {{height:80}}>
         <Container className='container'>
@@ -33,7 +49,8 @@ const Header = ({cart,removeFromCart}) => {
               style ={{width: 500}}
               placeholder='Search the products'
               className='m-auto'
-              // onChange={(e) => setSearchValue(e.target.value)}
+              value= {searchTerm}
+              onChange={handleSearchTermChange.bind(this)}
             ></FormControl>
           </Navbar.Text>
           <Nav>
@@ -89,12 +106,14 @@ const Header = ({cart,removeFromCart}) => {
     
     </Navbar>
     
+     
   )
 }
 
 const mapStateToProps  =  state => {
   return{
-    cart: state.shop.cart    
+    cart: state.shop.cart,    
+    products: state.shop.product,
   }
 }
 

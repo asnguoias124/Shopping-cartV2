@@ -9,7 +9,7 @@ const productInitialState = {
         byRating: 0, 
         searchQuery:"",
 
-        filteredItems: [1,2,3],
+        filteredItems: [],
 }
 
 
@@ -19,7 +19,7 @@ const productReducer = (state = productInitialState, action) =>{
         case actionTypes.FILTER_BY_PRICE:
             return{
                     ...state, 
-                    filteredItems: action.payload.items,
+                    // filteredItems: action.payload.items,
                     sort: action.payload.sort,
             }
             

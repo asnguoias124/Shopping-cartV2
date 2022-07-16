@@ -28,6 +28,7 @@ const Context = ({children}) => {
       byFastDelivery: false,
       byRating: 0,
       searchQuery:"",
+      ascending : false
     })
     
   return <Cart.Provider value={{state, dispatch, productState, productDispatch}} >{children}</Cart.Provider>;

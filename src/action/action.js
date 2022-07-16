@@ -38,13 +38,13 @@ export const loadCurrentItem = (item) =>{
 
 export const filterByPrice = (products, sort) =>{
    
-    if(sort !== ''){
-        products.sort((a,b) => (sort === "lowToHigh")  ? 
-        (a.price > b.price ? 1: -1) : 
-        (a.price < b.price ? 1: -1))
-    } else {
-        products.sort((a,b) => (a.id > b.id ? 1:-1));
-    }
+    // if(sort !== ''){
+    //     products.sort((a,b) => (sort === "lowToHigh")  ? 
+    //     (a.price > b.price ? 1: -1) : 
+    //     (a.price < b.price ? 1: -1))
+    // } else {
+    //     products.sort((a,b) => (a.id > b.id ? 1:-1));
+    // }
 
 
     return{
